@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    buildToolsVersion '30.0.0 rc2'
+    namespace 'com.rdapps.gamepad'
     compileSdkVersion 29
     def VERBOSE = "2"
     def DEBUG = "3"
@@ -53,7 +53,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    lintOptions {
+    lint {
         abortOnError false
     }
     androidResources {
