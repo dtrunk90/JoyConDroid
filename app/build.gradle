@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     namespace 'com.rdapps.gamepad'
-    compileSdkVersion 29
+    compileSdkVersion 33
     def VERBOSE = "2"
     def DEBUG = "3"
     def INFO = "4"
@@ -14,7 +14,7 @@ android {
     defaultConfig {
         applicationId "com.rdapps.gamepad"
         minSdkVersion 28
-        targetSdkVersion 29
+        targetSdkVersion 33
         versionCode 122
         versionName "1.0.91.2"
         resValue "string", "version_name", versionName
