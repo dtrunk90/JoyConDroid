@@ -173,21 +173,6 @@ public class BluetoothControllerService extends Service implements BluetoothProf
         }
     }
 
-    public void setBluetoothClass() {
-        try {
-            Method forName = Class.class.getMethod("forName", String.class);
-            Method getMethod = Class.class.getMethod("getMethod", String.class, Class[].class);
-            Object hiddenClass = forName.invoke(null, "android.bluetooth.BluetoothAdapter");
-            Object hiddenMethod = getMethod.invoke(hiddenClass, "setBluetoothClass", new Class[]{BluetoothClass.class});
-
-            Method getConstructor = Class.class.getMethod("getConstructors", new Class[]{});
-            Object btClass = (((Constructor[]) getConstructor.invoke(BluetoothClass.class, null))[0]).newInstance(0x002508);
-            ((Method) hiddenMethod).invoke(mBluetoothAdapter, btClass);
-        } catch (Exception e) {
-            log(TAG, "setBluetoothClass Failed: ", e);
-        }
-    }
-
     public boolean isConnected() {
         return deviceConnected;
     }
@@ -213,7 +198,6 @@ public class BluetoothControllerService extends Service implements BluetoothProf
         state = State.INITIAL;
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
-        //this.getClass().getMethod("setBluetoothClass", new Class[]{}).invoke(this);
         mBluetoothHidExecutor = Executors.newCachedThreadPool();
         mBluetoothHidDevice = null;
         timeoutScheduler = Executors.newScheduledThreadPool(1);
