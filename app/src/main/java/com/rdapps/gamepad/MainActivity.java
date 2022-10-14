@@ -1,5 +1,6 @@
 package com.rdapps.gamepad;
 
+import static android.Manifest.permission.*;
 import static android.bluetooth.BluetoothAdapter.ACTION_STATE_CHANGED;
 import static android.bluetooth.BluetoothAdapter.STATE_OFF;
 import static android.bluetooth.BluetoothAdapter.STATE_ON;
@@ -15,8 +16,10 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.util.Log;
@@ -28,10 +31,13 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -45,6 +51,8 @@ import com.rdapps.gamepad.versionchecker.Version;
 import com.rdapps.gamepad.versionchecker.VersionCheckerClient;
 import com.rdapps.gamepad.versionchecker.VersionCheckerService;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -57,6 +65,12 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getName();
 
     private static final int LEGAL_CODE = 1;
+
+    @RequiresApi(Build.VERSION_CODES.S)
+    private static final String[] RUNTIME_PERMISSIONS_S = new String[]{ BLUETOOTH_CONNECT, BLUETOOTH_SCAN };
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private static final String[] RUNTIME_PERMISSIONS_T = new String[]{ POST_NOTIFICATIONS };
 
     private BluetoothBroadcastReceiver mBluetoothBroadcastReceiver;
 
@@ -92,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         checkUpdate();
+        checkPermissions();
     }
 
     private void checkUpdate() {
@@ -131,6 +146,32 @@ public class MainActivity extends AppCompatActivity {
             startActivity(i);
         });
         builder.create().show();
+    }
+
+    private void checkPermissions() {
+        List<String> permissions = new ArrayList<>();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            for (String permission : RUNTIME_PERMISSIONS_S) {
+                if (ContextCompat.checkSelfPermission(MainActivity.this, permission) ==
+                        PackageManager.PERMISSION_DENIED) {
+                    permissions.add(permission);
+                }
+            }
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            for (String permission : RUNTIME_PERMISSIONS_T) {
+                if (ContextCompat.checkSelfPermission(MainActivity.this, permission) ==
+                        PackageManager.PERMISSION_DENIED) {
+                    permissions.add(permission);
+                }
+            }
+        }
+
+        if (!permissions.isEmpty()) {
+            ActivityCompat.requestPermissions(MainActivity.this, permissions.toArray(new String[0]), 2);
+        }
     }
 
     @Override
