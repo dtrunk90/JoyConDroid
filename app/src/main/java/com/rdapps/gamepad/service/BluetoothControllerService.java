@@ -43,6 +43,7 @@ import java.util.stream.Stream;
 
 import lombok.SneakyThrows;
 
+import static android.app.PendingIntent.FLAG_IMMUTABLE;
 import static android.bluetooth.BluetoothHidDeviceAppQosSettings.SERVICE_GUARANTEED;
 import static android.bluetooth.BluetoothProfile.HID_DEVICE;
 import static com.rdapps.gamepad.log.JoyConLog.log;
@@ -280,7 +281,7 @@ public class BluetoothControllerService extends Service implements BluetoothProf
                 .setContentTitle(contentTitle)
                 .setContentText(getText(R.string.disconnect_controller))
                 .setCategory(Notification.CATEGORY_SERVICE)
-                .setContentIntent(PendingIntent.getService(getApplicationContext(), 0, closeIntent, 0))
+                .setContentIntent(PendingIntent.getService(getApplicationContext(), 0, closeIntent, FLAG_IMMUTABLE))
                 .build();
     }
 

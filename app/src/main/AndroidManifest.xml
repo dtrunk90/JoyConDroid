@@ -14,7 +14,8 @@
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -51,7 +52,7 @@
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
 
-        <activity android:name=".RegisterUIActivity">
+        <activity android:name=".RegisterUIActivity" android:exported="false">
             <intent-filter>
                 <action android:name="com.rdapps.gamepad.registerui" />
                 <category android:name="android.intent.category.DEFAULT" />
